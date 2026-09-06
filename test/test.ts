@@ -164,6 +164,24 @@ Deno.test("simple img test", () => {
   assertEquals(html, result);
 });
 
+Deno.test("strip extracts text from Markdown images", () => {
+  assertEquals(strip("![A cat](cat.jpg)"), "A cat\n");
+  assertEquals(
+    strip('![A cat](cat.jpg "Portrait title")'),
+    "A cat\n",
+  );
+  assertEquals(strip('![](cat.jpg "Decorative image title")'), "\n");
+});
+
+Deno.test("strip extracts alt text from HTML images", () => {
+  assertEquals(strip('<img src="cat.jpg" alt="A cat">'), "A cat\n");
+  assertEquals(
+    strip('<img src="cat.jpg" alt="A &amp; B &lt; C">'),
+    "A &amp; B &lt; C\n",
+  );
+  assertEquals(strip('<img src="cat.jpg">'), "\n");
+});
+
 Deno.test("Media URL transformation with invalid URL", () => {
   const markdown = "![Image](invalid-url)";
   const mediaBaseUrl = "this is an invalid url";
@@ -417,6 +435,22 @@ Deno.test("task list", () => {
   const html = render(markdown);
   assertEquals(html, expectedHTML);
   assertEquals(strip(markdown), expectedStrip);
+});
+
+Deno.test("ordered list start survives HTML sanitization", () => {
+  const markdown = `1. First item
+
+\`\`\`ts
+const item = 1;
+\`\`\`
+
+2. Second item`;
+
+  assertStringIncludes(render(markdown), '<ol start="2">');
+  assertStringIncludes(
+    render(markdown, { disableHtmlSanitization: true }),
+    '<ol start="2">',
+  );
 });
 
 Deno.test("anchor test raw", () => {
