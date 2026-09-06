@@ -318,6 +318,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     h4: ["id"],
     h5: ["id"],
     h6: ["id"],
+    ol: ["start"],
     li: ["id"],
     td: ["colspan", "rowspan", "align", "width"],
     iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
@@ -426,11 +427,20 @@ function stripTokens(
       case "paragraph":
         break;
       case "html": {
-        // TODO: extract alt from img
         sections[index][header ? "header" : "content"] +=
           sanitizeHtml(token.text, {
             allowedTags: [],
             allowedAttributes: {},
+            transformTags: {
+              img: (
+                _tagName: string,
+                attributes: sanitizeHtml.Attributes,
+              ) => ({
+                tagName: "span",
+                attribs: {},
+                text: attributes.alt ?? "",
+              }),
+            },
           }).trim() + "\n\n";
         break;
       }
@@ -446,11 +456,7 @@ function stripTokens(
       case "link":
         break;
       case "image":
-        if (token.title) {
-          sections[index][header ? "header" : "content"] += token.title;
-        } else {
-          sections[index][header ? "header" : "content"] += token.text;
-        }
+        sections[index][header ? "header" : "content"] += token.text;
         break;
       case "strong":
         break;

@@ -12,7 +12,7 @@
   {
     "header": "Deno",
     "depth": 1,
-    "content": "Build Status - Cirrus Twitter handle\nDiscord Chat\nDeno is a simple, modern and secure runtime for JavaScript and\nTypeScript that uses V8 and is built in Rust."
+    "content": "Build Status - Cirrus Twitter handle\nDiscord Chat\n\nthe deno mascot dinosaur standing in the rain\n\nDeno is a simple, modern and secure runtime for JavaScript and\nTypeScript that uses V8 and is built in Rust."
   },
   {
     "header": "Features",
