@@ -8,6 +8,8 @@ and this project adheres to
 
 This changelog starts with changes made after version 0.12.0.
 
+## [Unreleased]
+
 ## [v0.13.0] - 2026-09-07
 
 ### Changed
